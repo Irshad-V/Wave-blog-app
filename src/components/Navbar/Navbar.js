@@ -15,15 +15,15 @@ function Navbar(props) {
 
     return (
         <nav className='NavbarItems'>
-            <h1 className='navbar-logo'> Blogs</h1>
+            <h1 className='navbar-logo'>Writing Waves </h1>
             <div className='menu-icons'>
                 <i className={clicked ? 'fas fa-times' : 'fas fa-bars'} onClick={clickedStatus} ></i>
             </div>
             <ul className={clicked ? 'nav-menu active' : 'nav-menu'}>
 
-                <Link className='nav-links ' to="/" >
-                    <li className={props.active === "home" ? "active-link" : ""} 
-                     onClick={() => props.setActive("home")}>
+                <Link className='nav-links ' to="/auth" >
+                    <li className={props.active === "home" ? "active-link" : ""}
+                        onClick={() => props.setActive("home")}>
                         Home
                     </li>
                 </Link>
@@ -50,8 +50,9 @@ function Navbar(props) {
                         <i class="fa-solid fa-user"></i>
                         {props.user ? <h4> irshad</h4> : <h4>no user</h4>}
                     </div>
-                    <button className={props.active === "login" ? "active-link" : ""}
-                        onClick={() => props.setActive("login")}>Sign up</button>
+                    
+                    <button  className={props.active === "login" ? "active-link" : ""}
+                        onClick={() => props.setActive("login")}> Sign up</button>
                 </div>
             </ul>
 

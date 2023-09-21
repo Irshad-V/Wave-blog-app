@@ -8,6 +8,7 @@ import About from './pages/About'
 import NotFound from './pages/NotFound'
 import { useState } from 'react'
 import Navbar from './components/Navbar/Navbar'
+import Auth from './pages/Auth'
 
 
 
@@ -16,9 +17,10 @@ function App() {
   const [active, setActive] = useState("")
 
   console.log(active)
+ 
 
   return (
-   
+
     <div className='App'>
       <Navbar active={active} setActive={setActive} />
       <Routes>
@@ -27,6 +29,7 @@ function App() {
         <Route path='/create' element={<AddEditBlog />} />
         <Route path='/update/:id' element={<AddEditBlog />} />
         <Route path='/about' element={<About />} />
+        <Route path='/auth' element={<Auth />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 
