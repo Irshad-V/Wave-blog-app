@@ -1,6 +1,14 @@
-import React, { useState ,useEffect} from 'react'
+import React, { useState } from 'react'
 import './Auth.scss'
 import CloseBtn from '../components/CloseBtn'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../../src/Firebase"
+import { useNavigate } from 'react-router-dom';
+
 
 const initialState = {
   firstName: "",
@@ -10,49 +18,90 @@ const initialState = {
   confirmPassword: "",
 
 }
-function Auth() {
+function Auth({ active, setActive, user, setUser }) {
+
+
+
   const [state, setState] = useState(initialState)
   const [signUp, setSignUp] = useState(false)
   const [notification, setNotification] = useState(false)
+  const [btnName, setBtnName] = useState("")
+  const [btnInfo, setBtnInfo] = useState("")
+
+
+  const navigate = useNavigate()
 
   const { email, password, confirmPassword, firstName, lastName } = state;
-
 
   const handleChange = (e) => {
     setState({
       ...state, [e.target.name]: e.target.value
     })
-    // console.log(state)
+
   }
 
-  useEffect(() => {
-    if (notification) {
-      console.log("notification:", notification);
-    }
-  }, [notification]);
 
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setNotification(false)
-    console.log("submitted 1")
-    console.log(notification);
-    console.log("submitted ")
-
     if (!signUp) {
+      if (email && password) {
+        signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            setUser(user);
+            setActive("home");
+          })
+          .catch((error) => {
+            setNotification(true)
+            setBtnName("Err")
+            setBtnInfo("email/Password doesn't match")
+
+          });
+
+
+
+
+
+
+
+      }
+
+
+
 
     } else {
 
-      if (password !== confirmPassword) {
-        console.log("checkin password..... ")
-        console.log(state)
+      if (password.length < 6) {
         setNotification(true)
-        console.log(notification);
+        setBtnName("Warn")
+        setBtnInfo(" Password should be at least 6 characters")
         return
+      }
+      if (firstName.length > 9 || lastName > 6) {
+        setNotification(true)
+        setBtnName("Warn")
+        setBtnInfo("firstName / LastName length is too much")
+        return
+      }
+      if (password !== confirmPassword) {
+        setNotification(true)
+        setBtnName("Err")
+        setBtnInfo("Password doesn't match")
+        return
+      }
+
+      if (firstName && lastName && email && password && confirmPassword) {
+        const { user } = await createUserWithEmailAndPassword(auth, email, password)
+        await updateProfile(user, { displayName: `${firstName} ${lastName}` })
+        setActive("home")
+        navigate("/")
       } else {
-
-
+        setNotification(true)
+        setBtnName("Warn")
+        setBtnInfo("All fields are mandatory")
+        return
       }
     }
   }
@@ -61,7 +110,7 @@ function Auth() {
       <div className='container'>
         <div className=' pt-5 mb-4 text-center fs-18 fw-6 ' >
           {!signUp ? "Sign-in" : "Sign-Up"}
-          {notification && (<CloseBtn Name="Err" Info="Password doesn't match" />)}
+          {notification && (<CloseBtn Name={btnName} Info={btnInfo} closeClick={setNotification} />)}
         </div>
         <div className='register-form    m-auto' style={{ maxWidth: "650px" }}>
           <form className='m-auto' onSubmit={handleSubmit}>

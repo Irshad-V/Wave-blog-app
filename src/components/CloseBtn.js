@@ -3,24 +3,19 @@ import React, { useState, useEffect } from 'react'
 function CloseBtn(props) {
     const [visible, setVisible] = useState(true)
 
-
-
     useEffect(() => {
-        const timeout = setTimeout(() => {
+        setTimeout(() => {
             setVisible(false);
+            props.closeClick(false)
         }, 4000);
-        return () => {
-            clearTimeout(timeout);
 
-        };
-    },[]);
+
+    }, [props]);
 
 
     const handleClose = () => {
-        setTimeout(() => {
-            setVisible(false)
-
-        }, 1000)
+        setVisible(false)
+        props.closeClick(false)
 
 
     }
@@ -35,7 +30,6 @@ function CloseBtn(props) {
                         <h2>{props.Name}</h2>
                         <p> {props.Info ? props.Info : "Something went wrong. Please try again."}</p>
                     </div>
-
                 )
             }
 

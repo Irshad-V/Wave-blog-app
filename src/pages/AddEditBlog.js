@@ -3,7 +3,7 @@ import React from 'react'
 function AddEditBlog() {
   return (
     <div>
-      editblog
+      editblog ,wmndkejd 
     </div>
   )
 }
