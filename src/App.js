@@ -43,18 +43,17 @@ function App() {
   return (
     <div className='App'>
       <Navbar active={active} setActive={setActive} user={user} handleLogout={handleLogout} />
-
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/details/:id' element={<Details />} />
-        <Route path='/create' element={<AddEditBlog />} />
+        <Route path='/create' element={< AddEditBlog user={user}  setActive={setActive}/>} />
         <Route path='/update/:id' element={<AddEditBlog />} />
         <Route path='/about' element={<About />} />
         <Route path='/auth' element={<Auth setActive={setActive} setUser={setUser} />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
 
-    </div> 
+    </div>
   )
 }
 

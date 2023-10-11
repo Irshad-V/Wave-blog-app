@@ -26,7 +26,7 @@ function Navbar(props) {
             </div>
             <ul className={`${clicked ? 'nav-menu active ' : 'nav-menu'}`} >
 
-                <Link className='nav-links ' to="/auth" onClick={clickedStatus} >
+                <Link className='nav-links ' to="/" onClick={clickedStatus} >
                     <li className={props.active === "home" ? "active-link" : ""}
                         onClick={() => props.setActive("home")}>
                         Home
@@ -39,7 +39,7 @@ function Navbar(props) {
                         Create
                     </li>
                 </Link>
-
+ 
                 <Link className='nav-links ' to="/about" onClick={clickedStatus}>
                     <li className={props.active === "about" ? "active-link" : ""}
                         onClick={() => props.setActive("about")}>
