@@ -13,7 +13,6 @@ import { auth } from './Firebase'
 import { signOut } from 'firebase/auth'
 
 
-
 function App() {
   const navigator = useNavigate()
   const [active, setActive] = useState("")
@@ -44,8 +43,8 @@ function App() {
     <div className='App'>
       <Navbar active={active} setActive={setActive} user={user} handleLogout={handleLogout} />
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/details/:id' element={<Details />} />
+        <Route path='/' element={<Home user={user}  setActive={setActive} />} />
+        <Route path='/detail/:id' element={<Details />} />
         <Route path='/create' element={< AddEditBlog user={user}  setActive={setActive}/>} />
         <Route path='/update/:id' element={<AddEditBlog />} />
         <Route path='/about' element={<About />} />

@@ -13,7 +13,7 @@ function Navbar(props) {
         setClicked(!clicked)
 
     }
-   
+
 
 
 
@@ -33,13 +33,17 @@ function Navbar(props) {
                     </li>
                 </Link>
 
-                <Link className='nav-links ' to="/create  " onClick={clickedStatus}>
-                    <li className={props.active === "create" ? "active-link" : ""}
-                        onClick={() => props.setActive("create")}>
-                        Create
-                    </li>
-                </Link>
- 
+                {
+                    props.user && <Link className='nav-links ' to="/create  " onClick={clickedStatus}>
+                        <li className={props.active === "create" ? "active-link" : ""}
+                            onClick={() => props.setActive("create")}>
+                            Create
+                        </li>
+                    </Link>
+                }
+
+
+
                 <Link className='nav-links ' to="/about" onClick={clickedStatus}>
                     <li className={props.active === "about" ? "active-link" : ""}
                         onClick={() => props.setActive("about")}>
@@ -57,7 +61,7 @@ function Navbar(props) {
                             </Link>
 
                             <Link className={`link-hover ${props.active === "log-out" ? "active-link" : ""}`}
-                                onClick={() => { props.setActive("log-out"); clickedStatus() ;props.handleLogout()}}> Logout </Link>
+                                onClick={() => { props.setActive("log-out"); clickedStatus(); props.handleLogout() }}> Logout </Link>
 
                         </>
 
@@ -65,13 +69,6 @@ function Navbar(props) {
                         :
                         (<Link to={"/auth"} className={`link-hover ${props.active === "login" ? "active-link" : ""}`}
                             onClick={() => { props.setActive("login"); clickedStatus() }}> login</Link>)}
-
-
-
-
-
-
-
 
 
                 </div>

@@ -7,6 +7,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 1.2rem 6rem;
+  position: sticky;
+  z-index: 1;
+
 
   .navbar-logo {
     font-size: 24px;

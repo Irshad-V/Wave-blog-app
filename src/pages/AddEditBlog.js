@@ -52,9 +52,11 @@ function AddEditBlog({ user, setActive }) {
           switch (snapshot.state) {
             case 'paused':
               console.log('Upload is paused');
+
               break;
             case 'running':
               console.log('Upload is running');
+
               break;
             default:
               console.log('Upload ...');
@@ -63,13 +65,17 @@ function AddEditBlog({ user, setActive }) {
         },
         (error) => {
           // Handle unsuccessful uploads
+          setNotification(true)
+          setBtn({ ...btn, Name: "Err", Info: "not uploaded" })
           console.log(error);
         },
         () => {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL);
+            console.log('File available at', downloadURL)
+            setForm((prev) => ({ ...prev, imgUrl: downloadURL }));
+
           });
         }
       );
@@ -77,7 +83,7 @@ function AddEditBlog({ user, setActive }) {
 
     }
     file && uploadFile();
-  }, [file]);
+  }, [file, btn]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -103,6 +109,12 @@ function AddEditBlog({ user, setActive }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (title.length > 100) {
+      setNotification(true)
+      setBtn({ ...btn, Name: "Err", Info: "length of title is over than 100 word " })
+      return
+    }
+
     if (category && tags && title && description && trending) {
       try {
         const postCollectionRef = collection(db, "Posts")
@@ -152,7 +164,7 @@ function AddEditBlog({ user, setActive }) {
           <div className='col-10 col-md-8 col-lg-6   ' >
             <form className='row blog-form' onSubmit={handleSubmit}>
               <div className='col-12 py-3'>
-                <input type='text' 
+                <input type='text'
                   className='form-control input-text-box'
                   name='title'
                   placeholder='Title'
@@ -227,7 +239,6 @@ function AddEditBlog({ user, setActive }) {
               <div className='col-12 py-3 text-center'>
                 <button className='btn btn-add' disabled={progress !== null && progress < 100}>Submit</button>
               </div>
-
 
             </form>
           </div>

@@ -52,6 +52,7 @@ function Auth({ active, setActive, user, setUser }) {
             const user = userCredential.user;
             setUser(user);
             setActive("home");
+            navigate("/")
           })
           .catch((error) => {
             setNotification(true)
