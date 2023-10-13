@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import InputTag from '../components/InputTag';
 import { db, storage } from "../Firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore/lite';
 import CloseBtn from '../components/CloseBtn';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 
 const initalState = {
@@ -30,60 +30,10 @@ function AddEditBlog({ user, setActive }) {
   const [notification, setNotification] = useState(false)
   const [btn, setBtn] = useState({})
   const [progress, setProgress] = useState(null);
+
   const navigate = useNavigate()
-
+  const { id } = useParams()
   console.log("form will show here.....");
-  console.log(form)
-  console.log(tags)
-  useEffect(() => {
-    console.log("form will show here..use effect...");
-    const uploadFile = () => {
-      const storageRef = ref(storage, file.name);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      // code from firebase documentaion  for file upload
-
-      uploadTask.on('state_changed',
-        (snapshot) => {
-          // Observe state change events such as progress, pause, and resume
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log('Upload is ' + progress + '% done');
-          setProgress(progress)
-          switch (snapshot.state) {
-            case 'paused':
-              console.log('Upload is paused');
-
-              break;
-            case 'running':
-              console.log('Upload is running');
-
-              break;
-            default:
-              console.log('Upload ...');
-              break;
-          }
-        },
-        (error) => {
-          // Handle unsuccessful uploads
-          setNotification(true)
-          setBtn({ ...btn, Name: "Err", Info: "not uploaded" })
-          console.log(error);
-        },
-        () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            console.log('File available at', downloadURL)
-            setForm((prev) => ({ ...prev, imgUrl: downloadURL }));
-
-          });
-        }
-      );
-
-
-    }
-    file && uploadFile();
-  }, [file, btn]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -107,49 +57,62 @@ function AddEditBlog({ user, setActive }) {
     console.log("handle cahnge oncategary chage")
   };
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setProgress("start.....")
     if (title.length > 100) {
-      setNotification(true)
-      setBtn({ ...btn, Name: "Err", Info: "length of title is over than 100 word " })
-      return
+      setNotification(true);
+      setBtn({ ...btn, Name: "Err", Info: "Length of title is over than 100 words" });
+      return;
     }
 
-    if (category && tags && title && description && trending) {
+    if (category && tags && title && description && trending && file) {
+      const storageRef = ref(storage, file.name);
       try {
-        const postCollectionRef = collection(db, "Posts")
-        await addDoc(postCollectionRef, {
+        const snapshot = await uploadBytesResumable(storageRef, file);
+        // Upload completed
+        const downloadURL = await getDownloadURL(snapshot.ref);
+
+        const postCollectionRef = collection(db, "Posts");
+        const docData = {
           ...form,
           timestamp: serverTimestamp(),
           author: user.displayName,
           userId: user.uid,
-        })
-        setNotification(true)
-        setBtn({ ...btn, Name: "Err", Info: "Added Successfully completed" })
-        console.log("databse added")
-        setNotification(true)
-        setBtn({ ...btn, Name: "Success", Info: "Added Successfully Completed" })
+          imgUrl: downloadURL,
+        };
+        const Alldata = await addDoc(postCollectionRef, docData);
+        console.log(Alldata);
+        console.log("all-data");
+        setNotification(true);
+        setBtn({ ...btn, Name: "Success", Info: "All files are stored" });
+        console.log("All files are stored in Firebase");
+
         setTimeout(() => {
-          setActive("home")
+          setActive("home");
           navigate("/");
         }, 2000);
-
-
-
       } catch (error) {
-        console.log(error);
 
+        setProgress(null)
+        setNotification(true);
+        setBtn({ ...btn, Name: "Err", Info: "File storage has some issues" });
+        console.error(error);
+        console.log("File storage has some issues");
       }
     } else {
-      setNotification(true)
-      setBtn({ ...btn, Name: "Err", Info: "All Field Mandatory" })
+      setProgress(null)
+      console.log("Err - All fields are mandatory")
+      setNotification(true);
+      setBtn({ ...btn, Name: "Err", Info: "All fields are mandatory" });
+      return;
     }
-    console.log("forrm submited")
+
+    console.log("Form submitted");
     console.log(form);
-
-  }
-
-
+  };
 
 
 
@@ -237,7 +200,7 @@ function AddEditBlog({ user, setActive }) {
                 />
               </div>
               <div className='col-12 py-3 text-center'>
-                <button className='btn btn-add' disabled={progress !== null && progress < 100}>Submit</button>
+                <button className='btn btn-add' type='submit' disabled={progress !== null} >Submit</button>
               </div>
 
             </form>
