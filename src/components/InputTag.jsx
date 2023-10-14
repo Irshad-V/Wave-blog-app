@@ -1,8 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-function InputTag({ updateTags }) {
+function InputTag({ updateTags, Alltag }) {
     const [tags, setTags] = useState(['Waves'])
+    useEffect(() => {
+        if (Alltag) {
+            setTags([...Alltag])
+        }
+    }, [Alltag])
 
+    console.log(Alltag);
+    console.log("innput Alltag");
 
     console.log(tags);
     const addTag = (e) => {

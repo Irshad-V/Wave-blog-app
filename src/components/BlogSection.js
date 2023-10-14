@@ -42,11 +42,14 @@ function BlogSection({ blogs, user, handleDlete }) {
                                                 <FontAwesomeIcon icon={faTrashCan}
                                                     className='fa-trash-can fs-20 mx-2'
                                                     onClick={() => handleDlete(item.id)} />
-                                                <FontAwesomeIcon icon={faPenToSquare} className='fa-pen-to-square fs-20 mx-2' />
+                                                <Link to={`/update/${item.id}`}>
+                                                    <FontAwesomeIcon icon={faPenToSquare} className='fa-pen-to-square fs-20 mx-2' />
+                                                </Link>
+
                                             </div>
 
                                         )}
-
+                                  
                                 </div>
                             </div>
 

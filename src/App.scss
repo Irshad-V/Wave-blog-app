@@ -351,6 +351,20 @@ a {
 
 }
 
+.height {
+    max-height: 200px;
+    min-width: 250px;
+    max-width: 400px;
+
+    @media screen and (max-width:300px) {
+        max-height: 200px;
+        min-width: 10px;
+        max-width: 280px;
+
+    }
+
+}
+
 .catg-dropdown {
     width: 100%;
     border-radius: 4px;
@@ -558,7 +572,8 @@ a {
     height: 3rem;
 
 }
-.spinner-center{
+
+.spinner-center {
     width: 100%;
     display: flex;
     justify-content: center;

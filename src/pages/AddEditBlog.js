@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import InputTag from '../components/InputTag';
 import { db, storage } from "../Firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore/lite';
+import { addDoc, collection, doc, getDoc, serverTimestamp, updateDoc } from 'firebase/firestore/lite';
 import CloseBtn from '../components/CloseBtn';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ const initalState = {
   tags: [],
   trending: "",
   category: "",
-  description: " "
+  description: ""
 };
 const categoryOption = [
   "Fashion",
@@ -34,6 +34,35 @@ function AddEditBlog({ user, setActive }) {
   const navigate = useNavigate()
   const { id } = useParams()
   console.log("form will show here.....");
+  const postCollectionRef = collection(db, "Posts");
+
+
+  useEffect(() => {
+    if (id) {
+      const getBlogDetails = async () => {
+        const postCollectionRef = collection(db, "Posts")
+        const docRef = doc(postCollectionRef, id)
+        try {
+          const docSnap = await getDoc(docRef);
+          console.log(docSnap.data());
+          if (docSnap) {
+            setForm({ ...docSnap.data() })
+            setActive(null)
+          }
+
+        } catch (error) {
+          console.log(error)
+        }
+      }
+
+      getBlogDetails()
+    } else {
+      setForm(initalState)
+    }
+  }, [id, setActive])
+
+
+
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -56,8 +85,9 @@ function AddEditBlog({ user, setActive }) {
     console.log(e.target.value);
     console.log("handle cahnge oncategary chage")
   };
-
-
+  console.log("image eeeeeeeeeee")
+  console.log(file);
+  console.log("image eeeeeeeeeee")
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,39 +98,83 @@ function AddEditBlog({ user, setActive }) {
       return;
     }
 
-    if (category && tags && title && description && trending && file) {
-      const storageRef = ref(storage, file.name);
-      try {
+    if (category && tags && title && description && trending && (file || form.imgUrl)) {
+
+      let uploadImageUrl = "image"
+      console.log("uploadImageUrl")
+      console.log(uploadImageUrl)
+  
+
+      if (file) {
+        const storageRef = ref(storage, file.name);
         const snapshot = await uploadBytesResumable(storageRef, file);
         // Upload completed
         const downloadURL = await getDownloadURL(snapshot.ref);
+       
+        uploadImageUrl = downloadURL
+      } else if (form.imgUrl) {
+        console.log("form?.imgUrl")
+        console.log(form?.imgUrl)
+     
+        const downloadURL = form?.imgUrl;
+        uploadImageUrl = downloadURL
 
-        const postCollectionRef = collection(db, "Posts");
-        const docData = {
-          ...form,
-          timestamp: serverTimestamp(),
-          author: user.displayName,
-          userId: user.uid,
-          imgUrl: downloadURL,
-        };
-        const Alldata = await addDoc(postCollectionRef, docData);
-        console.log(Alldata);
-        console.log("all-data");
-        setNotification(true);
-        setBtn({ ...btn, Name: "Success", Info: "All files are stored" });
-        console.log("All files are stored in Firebase");
+      }
 
-        setTimeout(() => {
-          setActive("home");
-          navigate("/");
-        }, 2000);
-      } catch (error) {
+      if (!id) {
 
-        setProgress(null)
-        setNotification(true);
-        setBtn({ ...btn, Name: "Err", Info: "File storage has some issues" });
-        console.error(error);
-        console.log("File storage has some issues");
+        try {
+          const docData = {
+            ...form,
+            timestamp: serverTimestamp(),
+            author: user.displayName,
+            userId: user.uid,
+            imgUrl: uploadImageUrl,
+          };
+          const Alldata = await addDoc(postCollectionRef, docData);
+          console.log(Alldata);
+          console.log("all-data");
+          setNotification(true);
+          setBtn({ ...btn, Name: "Success", Info: "All files are stored" });
+          console.log("All files are stored in Firebase");
+
+          setTimeout(() => {
+            setActive("home");
+            navigate("/");
+          }, 2000);
+        } catch (error) {
+
+          setProgress(null)
+          setNotification(true);
+          setBtn({ ...btn, Name: "Err", Info: "File storage has some issues" });
+          console.error(error);
+          console.log("File storage has some issues");
+        }
+      } else {
+
+        try {
+          await updateDoc(doc(postCollectionRef, id), {
+            ...form,
+            timestamp: serverTimestamp(),
+            imgUrl: uploadImageUrl,
+          });
+          setNotification(true);
+          setBtn({ ...btn, Name: "Success", Info: "Blog updated successfully" });
+          console.log("updated")
+
+          setTimeout(() => {
+            setActive("home");
+            setProgress(null)
+            navigate("/");
+          }, 2000);
+
+        } catch (err) {
+          setProgress(null)
+          console.log(err);
+          console.log("error here we will update tomorrow....insha allh")
+        }
+
+
       }
     } else {
       setProgress(null)
@@ -110,9 +184,13 @@ function AddEditBlog({ user, setActive }) {
       return;
     }
 
-    console.log("Form submitted");
+    console.log("Form submitt   ed");
     console.log(form);
+
   };
+  console.log("Formfgh");
+  console.log(form);
+  console.log("Formfgh");
 
 
 
@@ -120,7 +198,8 @@ function AddEditBlog({ user, setActive }) {
     <div className='container-fluid'>
       <div className='container'>
         <div className='col-12 text-center p-3 fw-6 fs-22'>
-          Create Blogs
+          {id ? "Update Blogs" : " Create Blogs"}
+
         </div>
         {notification && (<CloseBtn Name={btn.Name} Info={btn.Info} closeClick={setNotification} />)}
         <div className='row  justify-content-center align-items-center'  >
@@ -136,7 +215,7 @@ function AddEditBlog({ user, setActive }) {
                 />
               </div>
               <div className='col-12 py-3'>
-                <InputTag updateTags={updateTags} />
+                <InputTag updateTags={updateTags} Alltag={form?.tags} />
               </div>
 
               <div className="col-12 py-3 d-flex trending-div w-100 text-center" >
@@ -196,11 +275,21 @@ function AddEditBlog({ user, setActive }) {
               <div className='mb-3'>
                 <input type='file'
                   className='form-control'
+                  accept="image/png, image/gif, image/jpeg"
                   onChange={(e) => { setFile(e.target.files[0]) }}
                 />
               </div>
+
+              {id && form?.imgUrl && !file && (
+                <div className="col-12 py-3 d-flex align-items-center justify-content-center">
+                  <div className="d-flex align-items-center justify-content-center">
+                    <img src={form?.imgUrl} alt="Update" className="  height" />
+                  </div>
+                </div>
+              )}
+
               <div className='col-12 py-3 text-center'>
-                <button className='btn btn-add' type='submit' disabled={progress !== null} >Submit</button>
+                <button className='btn btn-add' type='submit' disabled={progress !== null} > {id ? "Update" : "Create"}</button>
               </div>
 
             </form>
