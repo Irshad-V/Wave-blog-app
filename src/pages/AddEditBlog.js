@@ -26,7 +26,7 @@ const categoryOption = [
   "travelogue",
   "Essay",
   "History",
-  "Story"
+  "Story",
   "Others"
 
 
