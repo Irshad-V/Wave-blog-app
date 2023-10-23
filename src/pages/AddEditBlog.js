@@ -23,7 +23,7 @@ const categoryOption = [
   "Sports",
   "Business",
   "Poem",
-  "travelogue,
+  "travelogue",
   "Essay",
   "History",
   "Story"
