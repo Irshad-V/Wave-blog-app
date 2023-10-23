@@ -22,6 +22,15 @@ const categoryOption = [
   "Politics",
   "Sports",
   "Business",
+  "Poem",
+  "travelogue,
+  "Essay",
+  "History",
+  "Story"
+  "Others"
+
+
+  
 ];
 
 function AddEditBlog({ user, setActive }) {
