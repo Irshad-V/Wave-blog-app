@@ -3,23 +3,33 @@ import BlogSection from '../components/BlogSection'
 import { db } from '../Firebase'
 import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore/lite';
 import Spinner from '../components/Spinner';
+import Tags from '../components/Tags';
+import MostPopular from '../components/MostPopular';
 function Home({ user, setActive }) {
 
   const [loading, setLoading] = useState(true)
   const [blogs, setBlogs] = useState([])
+  console.log(typeof blogs + " type of blogs");
+
   useEffect(() => {
     const postCollectionRef = collection(db, "Posts")
     const getPosts = async () => {
       const data = await getDocs(postCollectionRef);
       const list = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      console.log(typeof list + "typeo of list ")
       console.log(list)
-      console.log("list")
-      setBlogs(list)
+      const sortedBlogs = list.sort((a, b) => {
+        const dateA = a.timestamp.toDate();
+        const dateB = b.timestamp.toDate();
+        return dateB - dateA;
+      });
+      console.log("GetAllpost-list")
+      setBlogs(sortedBlogs)
       setLoading(false)
       setActive("home")
     };
     getPosts();
-  }, [setActive,loading]);
+  }, [setActive]);
 
   if (loading) {
     return <Spinner />
@@ -39,6 +49,8 @@ function Home({ user, setActive }) {
         console.log(err);
       }
     }
+
+
   }
 
   console.log(blogs);
@@ -50,14 +62,15 @@ function Home({ user, setActive }) {
       <div className='container p-3'>
 
         <div className='row mx-0'>
-          <h2 className='text-center'>Trending</h2>
+
           <div className='col-md-8 '>
-            <h2 className='text-start py-2'>Blog Section</h2>
-            <BlogSection blogs={blogs} user={user}  handleDlete={handleDlete}/>
+
+            <BlogSection setActive={setActive} blogs={blogs} user={user} handleDlete={handleDlete} />
           </div>
-          <div className='col-md-3'>
-            <h2>Tags</h2>
-            <h2>Most Popular</h2>
+          <div className='col-md-4'>
+            <Tags blogs={blogs} />
+            <MostPopular blogs={blogs} />
+
           </div>
 
 

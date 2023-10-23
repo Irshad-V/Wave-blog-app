@@ -407,16 +407,18 @@ a {
 
 .blogs-img {
     height: 200px;
+    width: 100%;
     border-radius: 5px;
-    overflow: hidden;
+
 
     // box-shadow: 0, 2px, 3px, 1px, rgba(0, 0, 0, 0);
 
 
     img {
+
         transition: all 0.5s ease-in;
         height: 200px;
-        min-width: 100%;
+        width: 100%;
 
         &:hover {
             transform: scale(1.1);
@@ -484,7 +486,7 @@ a {
 
 // details jsx
 .single {
-
+    margin-top: 10px;
 
     .blog-title-box {
         overflow: hidden;
@@ -516,11 +518,11 @@ a {
 
             img {
 
-                width: 70%;
+                width: 100%;
             }
 
             h2 {
-                width: 70%;
+                width: 100%;
                 font-size: 4rem;
             }
 
@@ -551,9 +553,9 @@ a {
             left: 0;
             width: 100%;
             height: 50%;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.7));
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.3));
             /* Adjust opacity and colors as needed */
-            z-index: 1;
+            z-index: 188;
             /* Ensure it's positioned below the text */
         }
 
@@ -562,6 +564,7 @@ a {
     .meta-info {
         border-bottom: 2px solid gray;
         margin-bottom: 12px;
+        padding-bottom: 12px;
     }
 
 }
@@ -578,4 +581,58 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+
+
+// tags...
+
+.tags {
+    text-decoration: none;
+}
+
+.tag {
+    background: #f1f1f1;
+    padding: 10px 15px;
+    color: #222;
+    margin-right: 8px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    transition: all .5s;
+    display: inline-block;
+
+    @media screen and (min-width: 770px) and (max-width: 990px) {
+        margin: 2px;
+        color: red;
+    }
+
+    &:hover,
+    &:focus {
+        background: $clr-yello;
+        color: #fff;
+        text-decoration: none;
+    }
+
+}
+
+// like btn page
+
+.heart {
+    animation: beat 1.2s ease-in;
+
+}
+
+@keyframes beat {
+    0% {
+        transform: scale(1, 1);
+    }
+
+    50% {
+        transform: scale(1.3, 1.3);
+    }
+
+    100% {
+        transform: scale(1, 1);
+    }
+
 }

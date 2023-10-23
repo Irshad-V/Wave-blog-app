@@ -44,7 +44,7 @@ function App() {
       <Navbar active={active} setActive={setActive} user={user} handleLogout={handleLogout} />
       <Routes>
         <Route path='/' element={<Home user={user} setActive={setActive} />} />
-        <Route path='/detail/:id' element={<Details />} />
+        <Route path='/detail/:id' element={<Details  setActive={setActive}/>} />
         <Route path='/create' element={< AddEditBlog user={user} setActive={setActive} />} />
         <Route path='/update/:id' element={<AddEditBlog user={user} setActive={setActive} />} />
         <Route path='/about' element={<About />} />

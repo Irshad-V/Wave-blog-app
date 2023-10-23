@@ -20,7 +20,7 @@ function Navbar(props) {
 
     return (
         <nav className='NavbarItems'>
-            <h1 className='navbar-logo'>Writing Waves </h1>
+            <h1 className='navbar-logo'>Waves </h1>
             <div className='menu-icons'>
                 <i className={clicked ? 'fas fa-times' : 'fas fa-bars'} onClick={clickedStatus}></i>
             </div>

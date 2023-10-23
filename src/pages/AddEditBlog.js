@@ -12,7 +12,8 @@ const initalState = {
   tags: [],
   trending: "",
   category: "",
-  description: ""
+  description: "",
+  like: 0
 };
 const categoryOption = [
   "Fashion",
@@ -26,7 +27,7 @@ const categoryOption = [
 function AddEditBlog({ user, setActive }) {
   const [form, setForm] = useState(initalState);
   const [file, setFile] = useState(null);
-  const { title, tags, category, trending, description } = form;
+  const { title, tags, category, trending, description ,like} = form;
   const [notification, setNotification] = useState(false)
   const [btn, setBtn] = useState({})
   const [progress, setProgress] = useState(null);
@@ -103,19 +104,19 @@ function AddEditBlog({ user, setActive }) {
       let uploadImageUrl = "image"
       console.log("uploadImageUrl")
       console.log(uploadImageUrl)
-  
+
 
       if (file) {
         const storageRef = ref(storage, file.name);
         const snapshot = await uploadBytesResumable(storageRef, file);
         // Upload completed
         const downloadURL = await getDownloadURL(snapshot.ref);
-       
+
         uploadImageUrl = downloadURL
       } else if (form.imgUrl) {
         console.log("form?.imgUrl")
         console.log(form?.imgUrl)
-     
+
         const downloadURL = form?.imgUrl;
         uploadImageUrl = downloadURL
 
@@ -130,6 +131,7 @@ function AddEditBlog({ user, setActive }) {
             author: user.displayName,
             userId: user.uid,
             imgUrl: uploadImageUrl,
+            like: like
           };
           const Alldata = await addDoc(postCollectionRef, docData);
           console.log(Alldata);
