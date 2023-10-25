@@ -36,20 +36,33 @@ function BlogSection({ blogs, user, handleDlete, setActive }) {
                                 <div className='d-flex justify-content-between  align-items-center'>
 
                                     <Link to={`/detail/${item.id}`}>
-                                        <button className="btn btn-read">Read More</button>
+                                        <button className="btn btn-read" onClick={setActive("")}>Read More</button>
                                     </Link>
 
 
                                 </div>
                             </div>
 
+
+
+{
+    console.log(item.userId)
+    
+}
+{
+    console.log(user.uid)
+    
+}
+{
+    console.log("item.userId")
+}
                             <div className='col-md-1'>
                                 {user && (
                                     <div className='d-flex flex-md-column pt-3 justify-content-between align-items-center '>
 
                                         <Likebtn like={item.like} id={item.id} setActive={setActive} />
 
-                                        {user.uid === item.userId || (user?.email === "virshad469@gmail.com" && (
+                                        {user.uid === item.userId ||user?.email === "virshad469@gmail.com" ? (
                                             <div className='d-flex flex-md-column pb-4'>
                                                 <FontAwesomeIcon icon={faTrashCan}
                                                     className='fa-trash-can fs-20 mb-3 ms-3 pe-3'
@@ -58,7 +71,7 @@ function BlogSection({ blogs, user, handleDlete, setActive }) {
                                                     <FontAwesomeIcon icon={faPenToSquare} className='fa-pen-to-square fs-20 mb-3 ms-3 pe-3 ' />
                                                 </Link>
                                             </div>
-                                        ))}
+                                        ):null}
                                     </div>
 
                                 )}

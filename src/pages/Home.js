@@ -45,6 +45,7 @@ function Home({ user, setActive }) {
         await deleteDoc(doc(db, "Posts", id));
         console.log("delter buton");
         setLoading(false)
+        setActive("home")
 
       } catch (err) {
         console.log("delter buton fals");
@@ -66,11 +67,10 @@ function Home({ user, setActive }) {
         <div className='row mx-0'>
 
           <div className='col-md-8 '>
-
             <BlogSection setActive={setActive} blogs={blogs} user={user} handleDlete={handleDlete} />
           </div>
           <div className='col-md-4'>
-          
+
             <Tags blogs={blogs} />
             <MostPopular blogs={blogs} />
 
