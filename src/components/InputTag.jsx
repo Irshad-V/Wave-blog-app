@@ -13,7 +13,8 @@ function InputTag({ updateTags, Alltag }) {
 
     console.log(tags);
     const addTag = (e) => {
-        if (e.key === "Enter") {
+        if (e.keyCode === 32 || e.key === " ") {
+            console.log("space enterd")
             e.preventDefault()
             if (e.target.value.length > 0) {
                 const newTags = [...tags, e.target.value];
