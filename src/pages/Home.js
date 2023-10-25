@@ -6,6 +6,8 @@ import Spinner from '../components/Spinner';
 import Tags from '../components/Tags';
 import MostPopular from '../components/MostPopular';
 function Home({ user, setActive }) {
+  console.log("user in fsakl;kd")
+  console.log(user?.email);
 
   const [loading, setLoading] = useState(true)
   const [blogs, setBlogs] = useState([])
@@ -68,6 +70,7 @@ function Home({ user, setActive }) {
             <BlogSection setActive={setActive} blogs={blogs} user={user} handleDlete={handleDlete} />
           </div>
           <div className='col-md-4'>
+          
             <Tags blogs={blogs} />
             <MostPopular blogs={blogs} />
 

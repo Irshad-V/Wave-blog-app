@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 
 function Navbar(props) {
 
+  
+
 
     const [clicked, setClicked] = useState(false)
 
@@ -41,6 +43,7 @@ function Navbar(props) {
                         </li>
                     </Link>
                 }
+
 
 
 

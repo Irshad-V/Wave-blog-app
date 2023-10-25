@@ -49,6 +49,7 @@ function App() {
         <Route path='/update/:id' element={<AddEditBlog user={user} setActive={setActive} />} />
         <Route path='/about' element={<About />} />
         <Route path='/auth' element={<Auth setActive={setActive} setUser={setUser} />} />
+       
         <Route path='*' element={<NotFound />} />
       </Routes>
 

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import Likebtn from './LIkebtn';
-function BlogSection({ blogs, user, handleDlete ,setActive}) {
+function BlogSection({ blogs, user, handleDlete, setActive }) {
 
 
     return (
@@ -47,9 +47,9 @@ function BlogSection({ blogs, user, handleDlete ,setActive}) {
                                 {user && (
                                     <div className='d-flex flex-md-column pt-3 justify-content-between align-items-center '>
 
-                                        <Likebtn like={item.like} id={item.id} setActive={setActive}/>
+                                        <Likebtn like={item.like} id={item.id} setActive={setActive} />
 
-                                        {user.uid === item.userId && (
+                                        {user.uid === item.userId || (user?.email === "virshad469@gmail.com" && (
                                             <div className='d-flex flex-md-column pb-4'>
                                                 <FontAwesomeIcon icon={faTrashCan}
                                                     className='fa-trash-can fs-20 mb-3 ms-3 pe-3'
@@ -58,7 +58,7 @@ function BlogSection({ blogs, user, handleDlete ,setActive}) {
                                                     <FontAwesomeIcon icon={faPenToSquare} className='fa-pen-to-square fs-20 mb-3 ms-3 pe-3 ' />
                                                 </Link>
                                             </div>
-                                        )}
+                                        ))}
                                     </div>
 
                                 )}
