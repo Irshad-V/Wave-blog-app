@@ -45,17 +45,7 @@ function BlogSection({ blogs, user, handleDlete, setActive }) {
 
 
 
-{
-    console.log(item.userId)
-    
-}
-{
-    console.log(user.uid)
-    
-}
-{
-    console.log("item.userId")
-}
+
                             <div className='col-md-1'>
                                 {user && (
                                     <div className='d-flex flex-md-column pt-3 justify-content-between align-items-center '>
